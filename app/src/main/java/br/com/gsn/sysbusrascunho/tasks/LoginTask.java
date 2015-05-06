@@ -1,5 +1,6 @@
 package br.com.gsn.sysbusrascunho.tasks;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -15,10 +16,20 @@ import br.com.gsn.sysbusrascunho.UrlServico;
  */
 public class LoginTask extends AsyncTask<String, Integer, Integer> {
 
+    ProgressDialog progressDialog;
     private Context context;
 
     public LoginTask(Context context) {
         this.context = context;
+    }
+
+
+    @Override
+    protected void onPreExecute() {
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setTitle("Carregando...");
+        progressDialog.setMessage("Realizando login");
+        progressDialog.show();
     }
 
     @Override
@@ -41,15 +52,6 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
             url = new URL(urlServico);
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             responseCode = http.getResponseCode();
-
-            if (responseCode == 200) {
-                Toast.makeText(context, "Usuário logado", Toast.LENGTH_SHORT).show();
-                publishProgress(responseCode);
-            } else if (responseCode == 400) {
-                Toast.makeText(context, "Senha ou usuário incorretos", Toast.LENGTH_SHORT).show();
-                publishProgress(responseCode);
-            }
-
 //            Object content = http.getContent();
 //            in = new BufferedInputStream(http.getInputStream());
 
@@ -60,16 +62,17 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
     }
 
     @Override
-    protected void onPostExecute(Integer responseCode) {
+    protected void onProgressUpdate(Integer... values) {
+        super.onProgressUpdate(values);
+    }
 
+    @Override
+    protected void onPostExecute(Integer responseCode) {
+        progressDialog.dismiss();
         if (responseCode == 200) {
             Toast.makeText(context, "Usuário logado", Toast.LENGTH_SHORT).show();
-            publishProgress(responseCode);
         } else if (responseCode == 404) {
             Toast.makeText(context, "Senha ou usuário incorretos", Toast.LENGTH_SHORT).show();
-            publishProgress(responseCode);
         }
-
-//        super.onPostExecute(s);
     }
 }
