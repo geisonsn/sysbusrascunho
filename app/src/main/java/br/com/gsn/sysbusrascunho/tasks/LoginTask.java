@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import br.com.gsn.sysbusrascunho.UrlServico;
+import br.com.gsn.sysbusrascunho.util.UrlServico;
 
 /**
  * Created by p001234 on 05/05/15.
@@ -26,10 +26,10 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
 
     @Override
     protected void onPreExecute() {
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setTitle("Carregando...");
-        progressDialog.setMessage("Realizando login");
-        progressDialog.show();
+//        progressDialog = new ProgressDialog(context);
+//        progressDialog.setTitle("Carregando...");
+//        progressDialog.setMessage("Realizando login");
+//        progressDialog.show();
     }
 
     @Override
@@ -51,6 +51,8 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
 
             url = new URL(urlServico);
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
+//            http.setRequestMethod();
+
             responseCode = http.getResponseCode();
 //            Object content = http.getContent();
 //            in = new BufferedInputStream(http.getInputStream());
@@ -68,7 +70,7 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
 
     @Override
     protected void onPostExecute(Integer responseCode) {
-        progressDialog.dismiss();
+//        progressDialog.dismiss();
         if (responseCode == 200) {
             Toast.makeText(context, "Usuário logado", Toast.LENGTH_SHORT).show();
         } else if (responseCode == 404) {

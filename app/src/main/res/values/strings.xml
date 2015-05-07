@@ -9,4 +9,8 @@
     <string name="recuperar_senha">Recuperar senha</string>
     <string name="novo_usuario">Novo usuário?</string>
     <string name="salvar">Salvar</string>
+    <string name="nome">Nome</string>
+    <string name="sobrenome">Sobrenome</string>
+    <string name="email">Email</string>
+    <string name="confirmacao_senha">Confirme a senha</string>
 </resources>
