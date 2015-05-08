@@ -12,6 +12,7 @@ import android.widget.Toast;
 import br.com.gsn.sysbusrascunho.util.ConnectionUtil;
 import br.com.gsn.sysbusrascunho.R;
 import br.com.gsn.sysbusrascunho.tasks.LoginTask;
+import br.com.gsn.sysbusrascunho.view.ClearFieldsError;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -27,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
         usuario = (EditText) findViewById(R.id.usuario);
         senha = (EditText) findViewById(R.id.senha);
 
+        usuario.addTextChangedListener(new ClearFieldsError(usuario));
+        senha.addTextChangedListener(new ClearFieldsError(senha));
     }
 
 
@@ -61,16 +64,16 @@ public class LoginActivity extends AppCompatActivity {
 
     public void realizarLogin(View view) {
 
-        if (loginValido()) {
-            if (ConnectionUtil.isOnline(this)) {
-                String usuario = this.usuario.getText().toString();
-                String senha = this.senha.getText().toString();
-                //usuario = "admin";
-                //senha = "admin";
-                new LoginTask(this).execute(usuario, senha);
-            } else {
-                Toast.makeText(this, "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
-            }
+        if (ConnectionUtil.isOnline(this)) {
+           if (loginValido()) {
+               String usuario = this.usuario.getText().toString();
+               String senha = this.senha.getText().toString();
+               //usuario = "admin";
+               //senha = "admin";
+               new LoginTask(this).execute(usuario, senha);
+           }
+        } else {
+            Toast.makeText(this, "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -78,15 +81,25 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean loginValido() {
 
-        boolean isValid = false;
+        EditText campoComFoco = null;
+
+        boolean isValid = true;
 
         if (usuario.getText().toString().length() == 0) {
+            campoComFoco = usuario;
             usuario.setError("Usuário obrigatório");
             isValid = false;
         }
         if (senha.getText().toString().length() == 0) {
+            if (campoComFoco == null) {
+                campoComFoco = senha;
+            }
             senha.setError("Senha obrigatória");
             isValid = false;
+        }
+
+        if (campoComFoco != null) {
+            campoComFoco.requestFocus();
         }
 
         return isValid;

@@ -35,14 +35,20 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
     @Override
     protected Integer doInBackground(String... params) {
 
+
+
 //      String urlServico = "http://sysbusweb-gsanton.rhcloud.com/services/usuario/:usuario/:senha";
         String urlServico = UrlServico.URL_LOGIN;
+
 
         String usuario = params[0];
         String senha = params[1];
 
         urlServico = urlServico.replace(":usuario", usuario);
         urlServico = urlServico.replace(":senha", senha);
+
+//        RestTemplate restTemplate = new RestTemplate();
+//        String result = restTemplate.getForObject(urlServico, String.class);
 
         int responseCode = 0;
         URL url = null;
@@ -75,6 +81,8 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
             Toast.makeText(context, "Usuário logado", Toast.LENGTH_SHORT).show();
         } else if (responseCode == 404) {
             Toast.makeText(context, "Senha ou usuário incorretos", Toast.LENGTH_SHORT).show();
+        } else if (responseCode == 503) {
+            Toast.makeText(context, "Servidor indisponível", Toast.LENGTH_SHORT).show();
         }
     }
 }
