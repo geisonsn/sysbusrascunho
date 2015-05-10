@@ -68,8 +68,8 @@ public class LoginActivity extends AppCompatActivity {
            if (loginValido()) {
                String usuario = this.usuario.getText().toString();
                String senha = this.senha.getText().toString();
-               //usuario = "admin";
-               //senha = "admin";
+               usuario = "admin";
+               senha = "admin";
                new LoginTask(this).execute(usuario, senha);
            }
         } else {

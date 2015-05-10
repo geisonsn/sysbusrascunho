@@ -5,7 +5,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -50,20 +53,33 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
 //        RestTemplate restTemplate = new RestTemplate();
 //        String result = restTemplate.getForObject(urlServico, String.class);
 
+        int len = 500;
         int responseCode = 0;
         URL url = null;
-        InputStream in = null;
+        InputStream is = null;
         try {
 
             url = new URL(urlServico);
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
-//            http.setRequestMethod();
+            //http.setRequestMethod("GET");
+            //http.setDoInput(true);
+
+            //http.connect();
 
             responseCode = http.getResponseCode();
-//            Object content = http.getContent();
-//            in = new BufferedInputStream(http.getInputStream());
+            is = http.getInputStream();
+
+            String conteudo = readIt(is, len);
 
         } catch (Exception e) {
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return responseCode;
@@ -77,12 +93,20 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
     @Override
     protected void onPostExecute(Integer responseCode) {
 //        progressDialog.dismiss();
-        if (responseCode == 200) {
+        if (responseCode == HttpURLConnection.HTTP_OK) {
             Toast.makeText(context, "Usuário logado", Toast.LENGTH_SHORT).show();
-        } else if (responseCode == 404) {
+        } else if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
             Toast.makeText(context, "Senha ou usuário incorretos", Toast.LENGTH_SHORT).show();
-        } else if (responseCode == 503) {
+        } else if (responseCode == HttpURLConnection.HTTP_UNAVAILABLE) {
             Toast.makeText(context, "Servidor indisponível", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private String readIt(InputStream stream, int len) throws IOException {
+        Reader reader = null;
+        reader = new InputStreamReader(stream, "UTF-8");
+        char[] buffer = new char[len];
+        reader.read(buffer);
+        return new String(buffer);
     }
 }
