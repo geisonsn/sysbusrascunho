@@ -13,4 +13,5 @@
     <string name="sobrenome">Sobrenome</string>
     <string name="email">Email</string>
     <string name="confirmacao_senha">Confirme a senha</string>
+
 </resources>

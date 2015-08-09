@@ -5,13 +5,14 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.HttpURLConnection;
+
+import br.com.gsn.sysbusrascunho.R;
+import br.com.gsn.sysbusrascunho.domain.UsuarioDTO;
 import br.com.gsn.sysbusrascunho.util.UrlServico;
 
 /**
@@ -38,48 +39,32 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
     @Override
     protected Integer doInBackground(String... params) {
 
-
-
-//      String urlServico = "http://sysbusweb-gsanton.rhcloud.com/services/usuario/:usuario/:senha";
         String urlServico = UrlServico.URL_LOGIN;
 
+        String paramUsuario = params[0];
+        String paramSenha = params[1];
 
-        String usuario = params[0];
-        String senha = params[1];
+        urlServico = urlServico.replace(":usuario", paramUsuario);
+        urlServico = urlServico.replace(":senha", paramSenha);
 
-        urlServico = urlServico.replace(":usuario", usuario);
-        urlServico = urlServico.replace(":senha", senha);
-
-//        RestTemplate restTemplate = new RestTemplate();
-//        String result = restTemplate.getForObject(urlServico, String.class);
-
-        int len = 500;
         int responseCode = 0;
-        URL url = null;
-        InputStream is = null;
+
+        UsuarioDTO usuario = null;
         try {
-
-            url = new URL(urlServico);
-            HttpURLConnection http = (HttpURLConnection) url.openConnection();
-            //http.setRequestMethod("GET");
-            //http.setDoInput(true);
-
-            //http.connect();
-
-            responseCode = http.getResponseCode();
-            is = http.getInputStream();
-
-            String conteudo = readIt(is, len);
-
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            usuario = restTemplate.getForObject(urlServico, UsuarioDTO.class);
+            responseCode = 200;
+        } catch (HttpStatusCodeException e) {
+            responseCode = e.getStatusCode().value();
+        /*} catch (HttpClientErrorException e) {
+            //TODO lança esta exceção quando o resultado não retorna nada
+            System.out.println(e);
+        } catch (HttpServerErrorException e) {
+            //TODO lança esta exceção quando o servidor está parado
+            System.out.println(e);*/
         } catch (Exception e) {
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            System.out.println(e);
         }
 
         return responseCode;
@@ -96,17 +81,11 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
         if (responseCode == HttpURLConnection.HTTP_OK) {
             Toast.makeText(context, "Usuário logado", Toast.LENGTH_SHORT).show();
         } else if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
-            Toast.makeText(context, "Senha ou usuário incorretos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getResources().getString(R.string.msg_senha_usuario_incorreto), Toast.LENGTH_SHORT).show();
         } else if (responseCode == HttpURLConnection.HTTP_UNAVAILABLE) {
-            Toast.makeText(context, "Servidor indisponível", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getResources().getString(R.string.msg_servidor_indisponivel) , Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Ops! Erros misteriosos também acontecem." , Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private String readIt(InputStream stream, int len) throws IOException {
-        Reader reader = null;
-        reader = new InputStreamReader(stream, "UTF-8");
-        char[] buffer = new char[len];
-        reader.read(buffer);
-        return new String(buffer);
     }
 }
