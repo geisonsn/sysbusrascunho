@@ -12,6 +12,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Light.NoTitleBar" >
+
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/app_name" >
@@ -20,9 +21,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
-        <activity android:name=".activities.MainActivity"/>
-        <activity android:name=".activities.NovoUsuarioAcitivity"/>
+
+        <activity android:name=".activities.InicialActivity">
+
+        </activity>
+
+        <activity android:name=".activities.NovoUsuarioActivity">
+        </activity>
         <activity android:name=".activities.NovaReclamacaoActivity"/>
     </application>
 

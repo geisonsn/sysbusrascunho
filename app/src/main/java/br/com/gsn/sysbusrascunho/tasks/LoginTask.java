@@ -27,7 +27,6 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
         this.context = context;
     }
 
-
     @Override
     protected void onPreExecute() {
 //        progressDialog = new ProgressDialog(context);
@@ -39,6 +38,7 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
     @Override
     protected Integer doInBackground(String... params) {
 
+//        String urlServico = "http://192.168.2.1:80/sysbusweb/services/usuario/:usuario/:senha";
         String urlServico = UrlServico.URL_LOGIN;
 
         String paramUsuario = params[0];
@@ -57,12 +57,6 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
             responseCode = 200;
         } catch (HttpStatusCodeException e) {
             responseCode = e.getStatusCode().value();
-        /*} catch (HttpClientErrorException e) {
-            //TODO lança esta exceção quando o resultado não retorna nada
-            System.out.println(e);
-        } catch (HttpServerErrorException e) {
-            //TODO lança esta exceção quando o servidor está parado
-            System.out.println(e);*/
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -85,7 +79,7 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
         } else if (responseCode == HttpURLConnection.HTTP_UNAVAILABLE) {
             Toast.makeText(context, context.getResources().getString(R.string.msg_servidor_indisponivel) , Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(context, "Ops! Erros misteriosos também acontecem." , Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Ops! Um erro misterioso ocorreu." , Toast.LENGTH_SHORT).show();
         }
     }
 }

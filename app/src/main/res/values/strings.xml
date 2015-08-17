@@ -6,12 +6,16 @@
     <string name="usuario">Usuário</string>
     <string name="senha">Senha</string>
     <string name="mantenha_me_conectado">Mantenha-me conectado</string>
-    <string name="recuperar_senha">Recuperar senha</string>
+    <string name="esqueci_minha_senha">Esqueci minha senha</string>
     <string name="novo_usuario">Novo usuário?</string>
     <string name="salvar">Salvar</string>
     <string name="nome">Nome</string>
     <string name="sobrenome">Sobrenome</string>
     <string name="email">Email</string>
     <string name="confirmacao_senha">Confirme a senha</string>
+    <string name="acessar">Acessar</string>
+    <string name="fazer_login">Fazer login</string>
+    <string name="cadastrar_se">Cadastrar-se</string>
+    <string name="msg_usuario_ja_cadastrado">Usuário já cadastrado</string>
 
 </resources>
