@@ -1,11 +1,9 @@
 package br.com.gsn.sysbusrascunho.view;
 
-import android.text.TextUtils;
 import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import br.com.gsn.sysbusrascunho.util.Validator;
 

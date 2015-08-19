@@ -3,28 +3,20 @@ package br.com.gsn.sysbusrascunho.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import br.com.gsn.sysbusrascunho.R;
 import br.com.gsn.sysbusrascunho.tasks.LoginTask;
 import br.com.gsn.sysbusrascunho.util.ConnectionUtil;
-import br.com.gsn.sysbusrascunho.view.ClearFieldsError;
-import br.com.gsn.sysbusrascunho.view.FieldValidation;
 
 
 public class LoginActivity extends Activity {
 
-    private EditText usuario;
+    private EditText email;
     private EditText senha;
 
     @Override
@@ -32,7 +24,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        usuario = (EditText) findViewById(R.id.senha);
+        email = (EditText) findViewById(R.id.email);
         senha = (EditText) findViewById(R.id.senha);
 
 //        usuario.setOnEditorActionListener(new FieldValidation(usuario, "Usuário obrigatório"));
@@ -50,8 +42,9 @@ public class LoginActivity extends Activity {
     public void realizarLogin(View view) {
 
         if (ConnectionUtil.isOnline(this)) {
+
            if (loginValido()) {
-               String usuario = this.usuario.getText().toString();
+               String usuario = this.email.getText().toString();
                String senha = this.senha.getText().toString();
                new LoginTask(this).execute(usuario, senha);
            }
@@ -66,9 +59,9 @@ public class LoginActivity extends Activity {
 
         boolean isValid = true;
 
-        if (TextUtils.isEmpty(usuario.getText())) {
-            campoComFoco = usuario;
-            usuario.setError(Html.fromHtml("<font color='red'>Usuário obrigatório</font>"));
+        if (TextUtils.isEmpty(email.getText())) {
+            campoComFoco = email;
+            email.setError(Html.fromHtml("<font color='red'>"+ email.getHint() + " obrigatório</font>"));
             isValid = false;
         }
 
@@ -76,7 +69,7 @@ public class LoginActivity extends Activity {
             if (campoComFoco == null) {
                 campoComFoco = senha;
             }
-            senha.setError(Html.fromHtml("<font color='red'>Senha obrigatória</font>"));
+            senha.setError(Html.fromHtml("<font color='red'>" + senha.getHint() + " obrigatória</font>"));
             isValid = false;
         }
 

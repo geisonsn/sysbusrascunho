@@ -38,30 +38,28 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
     @Override
     protected Integer doInBackground(String... params) {
 
-//        String urlServico = "http://192.168.2.1:80/sysbusweb/services/usuario/:usuario/:senha";
+//        String urlServico = "http://192.168.2.1:80/sysbusweb/services/usuario/{usuario}/{senha}";
         String urlServico = UrlServico.URL_LOGIN;
 
         String paramUsuario = params[0];
         String paramSenha = params[1];
 
-        urlServico = urlServico.replace(":usuario", paramUsuario);
-        urlServico = urlServico.replace(":senha", paramSenha);
-
-        int responseCode = 0;
+        urlServico = urlServico.replace("{usuario}", paramUsuario);
+        urlServico = urlServico.replace("{senha}", paramSenha);
 
         UsuarioDTO usuario = null;
+
         try {
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             usuario = restTemplate.getForObject(urlServico, UsuarioDTO.class);
-            responseCode = 200;
+            return HttpURLConnection.HTTP_OK;
         } catch (HttpStatusCodeException e) {
-            responseCode = e.getStatusCode().value();
+            return e.getStatusCode().value();
         } catch (Exception e) {
-            System.out.println(e);
+            return 0;
         }
 
-        return responseCode;
     }
 
     @Override

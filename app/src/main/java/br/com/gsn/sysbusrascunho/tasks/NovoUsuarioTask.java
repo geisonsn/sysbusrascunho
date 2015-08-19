@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -47,8 +45,8 @@ public class NovoUsuarioTask extends AsyncTask<UsuarioDTO, Integer, Integer> {
             rest.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             rest.getMessageConverters().add(new StringHttpMessageConverter());
 
-            ResponseEntity<String> responseEntity = rest.exchange(UrlServico.URL_NOVO_USUARIO, HttpMethod.POST, requestEntity, String.class);
-            String result = responseEntity.getBody();
+            ResponseEntity<UsuarioDTO> responseEntity = rest.exchange(UrlServico.URL_NOVO_USUARIO, HttpMethod.POST, requestEntity, UsuarioDTO.class);
+            UsuarioDTO result = responseEntity.getBody();
 
             return responseEntity.getStatusCode().value();
 
@@ -66,10 +64,10 @@ public class NovoUsuarioTask extends AsyncTask<UsuarioDTO, Integer, Integer> {
             Toast.makeText(context, "Usuário cadastrado com sucesso", Toast.LENGTH_SHORT).show();
         } else if (responseCode == HttpURLConnection.HTTP_CONFLICT) {
             Toast.makeText(context, context.getResources().getString(R.string.msg_usuario_ja_cadastrado), Toast.LENGTH_SHORT).show();
-        } else if (responseCode == HttpURLConnection.HTTP_UNAVAILABLE) {
+        } else if (responseCode == HttpURLConnection.HTTP_UNAVAILABLE || responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
             Toast.makeText(context, context.getResources().getString(R.string.msg_servidor_indisponivel) , Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(context, "Ops! Erros misteriosos também acontecem." , Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Ops! Ocorreu um erro não previsto." , Toast.LENGTH_SHORT).show();
         }
     }
 }
