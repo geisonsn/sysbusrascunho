@@ -1,4 +1,4 @@
-package br.com.gsn.sysbusweb.domain.enums;
+package br.com.gsn.sysbusrascunho.domain.enums;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,6 +25,15 @@ public enum ObjetoReclamadoEnum {
 	
 	public static ObjetoReclamadoEnum getFromOrdinal(int index) {
 		return values()[index];
+	}
+
+	public static ObjetoReclamadoEnum getFromDescricao(String descricao) {
+		for (ObjetoReclamadoEnum o : values()) {
+			if (o.getDescricao().equals(descricao)) {
+				return o;
+			}
+		}
+		return null;
 	}
 	
 	public static List<ObjetoReclamadoEnum> list(boolean semOutros) {
@@ -79,12 +88,4 @@ public enum ObjetoReclamadoEnum {
 		}
 		
 	}
-	
-	/*public static void main(String[] args) {
-		List<ObjetoReclamadoEnum> list = ObjetoReclamadoEnum.list(true);
-		for (ObjetoReclamadoEnum objetoReclamadoEnum : list) {
-			System.out.println("ObjetoReclamado [" + objetoReclamadoEnum.name() + ", " + objetoReclamadoEnum.ordinal() + "]");
-		}
-	}*/
-	
 }

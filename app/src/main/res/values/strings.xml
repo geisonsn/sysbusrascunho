@@ -18,4 +18,11 @@
     <string name="cadastrar_se">Cadastrar-se</string>
     <string name="msg_usuario_ja_cadastrado">Usuário já cadastrado</string>
 
+    <string-array name="objetoReclamado">
+        <item name="motorista">Motorista</item>
+        <item name="cobrador">Cobrador</item>
+        <item name="Veículo">Veículo</item>
+        <item name="Outros">Outros</item>
+    </string-array>
+
 </resources>

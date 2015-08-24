@@ -2,42 +2,39 @@ package br.com.gsn.sysbusrascunho.domain;
 
 import java.io.Serializable;
 
-public class LinhaDTO implements Serializable {
+public class LinhaDTO extends InformationRequest implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
+	private Long idLinha;
 
-	private Long idVeiculo;
-	
-	private String descricao;
+	private String descricaoLinha;
 
 	private String numeroLinha;
 
-	private String numeroRegistro;
+	private String nomeEmpresa;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+	public LinhaDTO() {
 	}
 	
-	public Long getIdVeiculo() {
-		return idVeiculo;
+	public LinhaDTO(String message) {
+		setMessage(message);
+	}
+	
+	public Long getIdLinha() {
+		return idLinha;
 	}
 
-	public void setIdVeiculo(Long idVeiculo) {
-		this.idVeiculo = idVeiculo;
+	public void setIdLinha(Long idLinha) {
+		this.idLinha = idLinha;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public String getDescricaoLinha() {
+		return descricaoLinha;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setDescricaoLinha(String descricaoLinha) {
+		this.descricaoLinha = descricaoLinha;
 	}
 
 	public String getNumeroLinha() {
@@ -48,11 +45,16 @@ public class LinhaDTO implements Serializable {
 		this.numeroLinha = numeroLinha;
 	}
 
-	public String getNumeroRegistro() {
-		return numeroRegistro;
+	public String getNomeEmpresa() {
+		return nomeEmpresa;
 	}
 
-	public void setNumeroRegistro(String numeroRegistro) {
-		this.numeroRegistro = numeroRegistro;
+	public void setNomeEmpresa(String nomeEmpresa) {
+		this.nomeEmpresa = nomeEmpresa;
+	}
+
+	@Override
+	public String toString() {
+		return this.getNumeroLinha();
 	}
 }

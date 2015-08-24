@@ -27,9 +27,6 @@ public class LoginActivity extends Activity {
         email = (EditText) findViewById(R.id.email);
         senha = (EditText) findViewById(R.id.senha);
 
-//        usuario.setOnEditorActionListener(new FieldValidation(usuario, "Usuário obrigatório"));
-//        senha.setOnEditorActionListener(new FieldValidation(senha, "Senha obrigatória"));
-
     }
 
     public void novoUsuario(View view) {
