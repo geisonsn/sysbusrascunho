@@ -1,5 +1,7 @@
 package br.com.gsn.sysbusrascunho.util;
 
+import android.content.Context;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -12,46 +14,61 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.HttpURLConnection;
 
-import br.com.gsn.sysbusrascunho.domain.ResponseRequest;
+import br.com.gsn.sysbusrascunho.domain.SprintRestResponse;
 
 /**
  * Created by Geison on 23/08/2015.
  */
 public final class SpringRestClient {
 
-    public static <T> ResponseRequest post(final String url, final T param, Class<T> returnType) {
+    public static <T> SprintRestResponse post(Context context, final String url, final T param, Class<T> returnType) {
         try {
             HttpHeaders requestHeaders = new HttpHeaders();
             requestHeaders.setContentType(new MediaType("application", "json"));
             HttpEntity<T> requestEntity = new HttpEntity<>(param, requestHeaders);
 
-            RestTemplate rest = new RestTemplate();
+            RestTemplate restTemplate = new RestTemplate();
 
-            rest.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            rest.getMessageConverters().add(new StringHttpMessageConverter());
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
 
-            ResponseEntity<T> responseEntity = rest.exchange(url, HttpMethod.POST, requestEntity, returnType);
+            ResponseEntity<T> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, returnType);
 
-            return new ResponseRequest(responseEntity.getBody(), responseEntity.getStatusCode().value());
+            return new SprintRestResponse(context, responseEntity.getBody(), responseEntity.getStatusCode().value());
 
         } catch (HttpStatusCodeException e) {
-            return new ResponseRequest(e.getStatusCode().value());
+            return new SprintRestResponse(context, e.getStatusCode().value());
         } catch (Exception e) {
-            return new ResponseRequest(0);
+            return new SprintRestResponse(context, 0);
         }
     }
 
-    public static <T> ResponseRequest get(final String url, Class<T> returnType) {
+    public static <T> SprintRestResponse postForObject(Context context, final String url, final T param, Class<T> returnType) {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+
+            T returnObject = restTemplate.postForObject(url, param, returnType);
+            return new SprintRestResponse(context, returnObject, HttpURLConnection.HTTP_OK);
+        } catch (HttpStatusCodeException e) {
+            return new SprintRestResponse(context, e.getStatusCode().value());
+        } catch (Exception e) {
+            return new SprintRestResponse(context, 0);
+        }
+    }
+
+    public static <T> SprintRestResponse getForObject(Context context, final String url, Class<T> returnType) {
         try {
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 
             T returnObject = restTemplate.getForObject(url, returnType);
-            return new ResponseRequest(returnObject, HttpURLConnection.HTTP_OK);
+            return new SprintRestResponse(context, returnObject, HttpURLConnection.HTTP_OK);
         } catch (HttpStatusCodeException e) {
-            return new ResponseRequest(e.getStatusCode().value());
+            return new SprintRestResponse(context, e.getStatusCode().value());
         } catch (Exception e) {
-            return new ResponseRequest(0);
+            return new SprintRestResponse(context, 0);
         }
     }
 }

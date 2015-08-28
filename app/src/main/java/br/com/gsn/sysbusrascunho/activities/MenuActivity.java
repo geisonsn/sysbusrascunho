@@ -13,7 +13,7 @@ import br.com.gsn.sysbusrascunho.R;
  */
 public class MenuActivity extends Activity implements View.OnClickListener {
 
-    Button telaInicial, telaLogin, cadastroUsuario, cadastroReclamacao, realizarCheckin;
+    private Button telaInicial, telaLogin, cadastroUsuario, cadastroReclamacao, realizarCheckin, cadastroLinha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +30,8 @@ public class MenuActivity extends Activity implements View.OnClickListener {
         cadastroReclamacao.setOnClickListener(this);
         realizarCheckin = (Button) findViewById(R.id.realizarCheckin);
         realizarCheckin.setOnClickListener(this);
+        cadastroLinha = (Button) findViewById(R.id.cadastroLinha);
+        cadastroLinha.setOnClickListener(this);
     }
 
     @Override
@@ -43,7 +45,9 @@ public class MenuActivity extends Activity implements View.OnClickListener {
         } else if (v.getId() == R.id.cadastroReclamacao) {
             startActivity(new Intent(this, NovaReclamacaoActivity.class));
         } else if (v.getId() == R.id.realizarCheckin) {
-
+            startActivity(new Intent(this, CheckinActivity.class));
+        } else if (v.getId() == R.id.cadastroLinha) {
+            startActivity(new Intent(this, NovaLinhaActivity.class));
         }
     }
 }

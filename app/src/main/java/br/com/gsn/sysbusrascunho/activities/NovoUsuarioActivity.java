@@ -38,7 +38,6 @@ public class NovoUsuarioActivity extends Activity {
 
     public void cadastrarUsuario(View view) {
         if (ConnectionUtil.isOnline(this)) {
-
             UsuarioDTO usuario = new UsuarioDTO();
             usuario.setNome(nome.getText().toString());
             usuario.setEmail(email.getText().toString());
@@ -48,7 +47,6 @@ public class NovoUsuarioActivity extends Activity {
             if (isValidForm()) {
                 new NovoUsuarioTask(this).execute(usuario);
             }
-
         } else {
             Toast.makeText(this, "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
         }

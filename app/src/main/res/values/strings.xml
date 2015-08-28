@@ -17,12 +17,13 @@
     <string name="fazer_login">Fazer login</string>
     <string name="cadastrar_se">Cadastrar-se</string>
     <string name="msg_usuario_ja_cadastrado">Usuário já cadastrado</string>
+    <string name="msg_registro_ja_cadastrado">Já existe um registro ativo com os dados informados</string>
 
     <string-array name="objetoReclamado">
-        <item name="motorista">Motorista</item>
         <item name="cobrador">Cobrador</item>
-        <item name="Veículo">Veículo</item>
-        <item name="Outros">Outros</item>
+        <item name="motorista">Motorista</item>
+        <item name="veiculo">Veículo</item>
+        <item name="outros">Outros</item>
     </string-array>
 
 </resources>

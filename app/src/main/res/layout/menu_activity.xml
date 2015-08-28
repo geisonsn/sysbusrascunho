@@ -34,4 +34,10 @@
         android:text="Checkin"
         android:id="@+id/realizarCheckin"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cadastrar linha"
+        android:id="@+id/cadastroLinha"/>
+
 </LinearLayout>
