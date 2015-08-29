@@ -12,6 +12,9 @@ import br.com.gsn.sysbusrascunho.R;
  */
 public abstract class AbstractSpringRestResponse {
 
+    public static final int CONNECTION_FAILED = -666;
+    public static final int UNEXPECTED_ERROR = -667;
+
     private Context context;
     private int statusCode;
     private Object objectReturn;
@@ -76,8 +79,12 @@ public abstract class AbstractSpringRestResponse {
         }
     }
 
-    protected void onOther() {
-        Toast.makeText(context, "Ops! Ocorreu um erro não previsto." , Toast.LENGTH_SHORT).show();
+    protected void onConnectionFailed() {
+        Toast.makeText(context, "Falha na conexão! Verifique sua conexão e tente novamente." , Toast.LENGTH_SHORT).show();
+    }
+
+    protected void onUnexpectedError() {
+        Toast.makeText(context, "Ops! Ocorreu um erro inesperado." , Toast.LENGTH_SHORT).show();
     }
 
     public void setOnHttpOk(OnHttpOk onHttpOk) {
@@ -96,18 +103,29 @@ public abstract class AbstractSpringRestResponse {
     }
 
     public void executeCallbacks() {
-        if (this.statusCode == HttpURLConnection.HTTP_OK)  {
-            onHttpOk();
-        } else if (this.statusCode == HttpURLConnection.HTTP_CREATED) {
-            onHttpCreated();
-        } else if (this.statusCode == HttpURLConnection.HTTP_CONFLICT) {
-            onHttpConflict();
-        } else if (this.statusCode == HttpURLConnection.HTTP_UNAVAILABLE) {
-            onHttpUnavailable();
-        }  else if (this.statusCode == HttpURLConnection.HTTP_NOT_FOUND) {
-            onHttpNotFound();
-        } else {
-            onOther();
+
+        if (StatusCodeFamily.getFamily(this.statusCode) == StatusCodeFamily.SUCCESSFUL) {
+            if (this.statusCode == HttpURLConnection.HTTP_OK)  {
+                onHttpOk();
+            } else if (this.statusCode == HttpURLConnection.HTTP_CREATED) {
+                onHttpCreated();
+            }
+        } else if (StatusCodeFamily.getFamily(this.statusCode) == StatusCodeFamily.CLIENT_ERROR) {
+            if (this.statusCode == HttpURLConnection.HTTP_CONFLICT) {
+                onHttpConflict();
+            } else if (this.statusCode == HttpURLConnection.HTTP_NOT_FOUND) {
+                onHttpNotFound();
+            }
+        } else if (StatusCodeFamily.getFamily(this.statusCode) == StatusCodeFamily.SERVER_ERROR) {
+            if (this.statusCode == HttpURLConnection.HTTP_UNAVAILABLE) {
+                onHttpUnavailable();
+            }
+        } else if (StatusCodeFamily.getFamily(this.statusCode) == StatusCodeFamily.OTHER) {
+            if (this.statusCode == AbstractSpringRestResponse.CONNECTION_FAILED) {
+                onConnectionFailed();
+            } else if (this.statusCode == AbstractSpringRestResponse.UNEXPECTED_ERROR) {
+                onUnexpectedError();
+            }
         }
     }
 
@@ -125,5 +143,41 @@ public abstract class AbstractSpringRestResponse {
     }
 
     public interface OnHttpConflict extends HttpStatusCodeCallback {
+    }
+
+    public static final class StatusCodeFamily {
+        /**
+         * Informational 1xx
+         */
+        public static int INFORMATIONAL = 1;
+
+        /**
+         * Successful 2xx
+         */
+        public static int SUCCESSFUL = 2;
+
+        /**
+         * Redirection 3xx
+         */
+        public static int REDIRECTION = 3;
+
+        /**
+         * Client Error 4xx
+         */
+        public static int CLIENT_ERROR = 4;
+
+        /**
+         * Server Error 5xx
+         */
+        public static int SERVER_ERROR = 5;
+
+        /**
+         * Other errors
+         */
+        public static int OTHER = 6;
+
+        public static int getFamily(int statusCode) {
+            return statusCode / 100;
+        }
     }
 }

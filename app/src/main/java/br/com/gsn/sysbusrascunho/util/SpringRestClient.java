@@ -10,10 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.HttpURLConnection;
 
+import br.com.gsn.sysbusrascunho.domain.AbstractSpringRestResponse;
 import br.com.gsn.sysbusrascunho.domain.SprintRestResponse;
 
 /**
@@ -38,23 +40,29 @@ public final class SpringRestClient {
 
         } catch (HttpStatusCodeException e) {
             return new SprintRestResponse(context, e.getStatusCode().value());
+        } catch (RestClientException e) {
+            return new SprintRestResponse(context, AbstractSpringRestResponse.CONNECTION_FAILED);
         } catch (Exception e) {
-            return new SprintRestResponse(context, 0);
+            return new SprintRestResponse(context, AbstractSpringRestResponse.UNEXPECTED_ERROR);
         }
     }
 
-    public static <T> SprintRestResponse postForObject(Context context, final String url, final T param, Class<T> returnType) {
+    public static <T> SprintRestResponse postForObject(Context context, final String url, final T param, Class<T> returnType)
+            throws HttpStatusCodeException {
         try {
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
 
             T returnObject = restTemplate.postForObject(url, param, returnType);
+
             return new SprintRestResponse(context, returnObject, HttpURLConnection.HTTP_OK);
         } catch (HttpStatusCodeException e) {
             return new SprintRestResponse(context, e.getStatusCode().value());
+        } catch (RestClientException e) {
+            return new SprintRestResponse(context, AbstractSpringRestResponse.CONNECTION_FAILED);
         } catch (Exception e) {
-            return new SprintRestResponse(context, 0);
+            return new SprintRestResponse(context, AbstractSpringRestResponse.UNEXPECTED_ERROR);
         }
     }
 
@@ -64,11 +72,14 @@ public final class SpringRestClient {
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 
             T returnObject = restTemplate.getForObject(url, returnType);
+
             return new SprintRestResponse(context, returnObject, HttpURLConnection.HTTP_OK);
         } catch (HttpStatusCodeException e) {
             return new SprintRestResponse(context, e.getStatusCode().value());
+        } catch (RestClientException e) {
+            return new SprintRestResponse(context, AbstractSpringRestResponse.CONNECTION_FAILED);
         } catch (Exception e) {
-            return new SprintRestResponse(context, 0);
+            return new SprintRestResponse(context, AbstractSpringRestResponse.UNEXPECTED_ERROR);
         }
     }
 }
