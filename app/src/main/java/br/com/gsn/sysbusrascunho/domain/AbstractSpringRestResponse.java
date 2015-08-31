@@ -80,7 +80,7 @@ public abstract class AbstractSpringRestResponse {
     }
 
     protected void onConnectionFailed() {
-        Toast.makeText(context, "Falha na conexão! Verifique sua conexão e tente novamente." , Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Falha na conexão! Verifique sua conexão e tente novamente." , Toast.LENGTH_LONG).show();
     }
 
     protected void onUnexpectedError() {
@@ -177,7 +177,7 @@ public abstract class AbstractSpringRestResponse {
         public static int OTHER = 6;
 
         public static int getFamily(int statusCode) {
-            return statusCode / 100;
+            return Math.abs(statusCode / 100);
         }
     }
 }
