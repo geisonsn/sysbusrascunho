@@ -34,6 +34,9 @@
         <activity android:name=".activities.CheckinActivity">
         </activity>
 
+        <activity android:name=".activities.PercentLayoutActivity">
+        </activity>
+
         <activity android:name=".activities.MenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

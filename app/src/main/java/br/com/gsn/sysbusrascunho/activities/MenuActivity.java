@@ -13,7 +13,7 @@ import br.com.gsn.sysbusrascunho.R;
  */
 public class MenuActivity extends Activity implements View.OnClickListener {
 
-    private Button telaInicial, telaLogin, cadastroUsuario, cadastroReclamacao, realizarCheckin, cadastroLinha;
+    private Button telaInicial, telaLogin, cadastroUsuario, cadastroReclamacao, realizarCheckin, cadastroLinha, percentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +32,8 @@ public class MenuActivity extends Activity implements View.OnClickListener {
         realizarCheckin.setOnClickListener(this);
         cadastroLinha = (Button) findViewById(R.id.cadastroLinha);
         cadastroLinha.setOnClickListener(this);
+        percentLayout = (Button) findViewById(R.id.buttonPercentLayout);
+        percentLayout.setOnClickListener(this);
     }
 
     @Override
@@ -48,6 +50,8 @@ public class MenuActivity extends Activity implements View.OnClickListener {
             startActivity(new Intent(this, CheckinActivity.class));
         } else if (v.getId() == R.id.cadastroLinha) {
             startActivity(new Intent(this, NovaLinhaActivity.class));
+        } else if (v.getId() == R.id.buttonPercentLayout) {
+            startActivity(new Intent(this, PercentLayoutActivity.class));
         }
     }
 }

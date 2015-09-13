@@ -40,4 +40,11 @@
         android:text="Cadastrar linha"
         android:id="@+id/cadastroLinha"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PercentRelativeLayout"
+        android:id="@+id/buttonPercentLayout"
+        android:onClick="mostrarPercentLayout" />
+
 </LinearLayout>
